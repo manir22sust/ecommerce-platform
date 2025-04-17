@@ -1,4 +1,9 @@
-export const users = [
-  { id: 1, name: "John Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-];
+import mongoose from "mongoose";
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+});
+
+const User = mongoose.model("User", userSchema);
+
+export default User;
