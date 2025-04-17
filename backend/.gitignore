@@ -1,0 +1,27 @@
+# dependencies
+/node_modules
+
+# dotenv
+.env
+.env.local
+
+# logs
+logs/
+*.log
+npm-debug.log*
+
+# database
+*.sqlite
+*.sqlite3
+*.db
+
+# build artifacts (optional)
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
