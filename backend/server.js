@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 import connectDB from "./config/db.js";
 
 // Load environment variables from .env file
@@ -14,9 +15,14 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
 // routes
+// user routes
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+
+// product routes
+app.use("/api/products", productRoutes);
 
 // Connect to MongoDB
 connectDB();
