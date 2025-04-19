@@ -1,7 +1,16 @@
-import React from "react";
+import CategoryRecommendations from "../components/CategoryRecommendations";
+import CategoryPromotion from "../components/CategoryPromotion";
+import MembershipBanner from "../components/MembershipBanner";
+import OutfitRecommendations from "../components/OutfitRecommendations";
 
-const Home = () => {
-  return <div>Home</div>;
-};
-
-export default Home;
+export default function Home() {
+  return (
+    <>
+      <CategoryRecommendations />
+      <CategoryPromotion />
+      <hr className="my-8 border-gray-200" />
+      <MembershipBanner />
+      <OutfitRecommendations />
+    </>
+  );
+}
