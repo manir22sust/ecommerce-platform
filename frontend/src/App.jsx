@@ -8,6 +8,8 @@ import CategoryNavigation from "./components/CategoryNavigation";
 import Home from "./pages/Home";
 import LadiesFashion from "./pages/LadiesFashion";
 import SingleLadiesProduct from "./pages/SingleLadiesProduct";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
                 element={<SingleLadiesProduct />}
               />
               {/* <Route path="/ladies-fashion/:slug" element={<SingleLadiesProduct />} /> */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
             </Routes>
           </div>
         </main>
