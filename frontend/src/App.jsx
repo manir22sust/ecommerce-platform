@@ -10,6 +10,7 @@ import LadiesFashion from "./pages/LadiesFashion";
 import SingleLadiesProduct from "./pages/SingleLadiesProduct";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
                 element={<SingleLadiesProduct />}
               />
               {/* <Route path="/ladies-fashion/:slug" element={<SingleLadiesProduct />} /> */}
+              <Route path="/cart" element={<Cart />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>
