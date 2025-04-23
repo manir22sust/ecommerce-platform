@@ -1,10 +1,16 @@
 const CategoryPromotion = () => {
   const categories = [
-    { name: "Betten", image: "/images/betten.jpg" },
-    { name: "Jacken", image: "/images/jacken.jpg" },
-    { name: "Kleiderschränke", image: "/images/kleiderschranke.jpg" },
-    { name: "Bettwäsche", image: "/images/bettwaesche.jpg" },
-    { name: "Herren Pullover", image: "/images/pullover.jpg" },
+    { name: "Betten", image: "../assets/images/categories/Beds.jpg" },
+    { name: "Jacken", image: "../assets/images/categories/Jackets-v1.jpg" },
+    {
+      name: "Kleiderschränke",
+      image: "../assets/images/categories/Wardrobes.jpg",
+    },
+    { name: "Bettwäsche", image: "../assets/images/categories/Bedding.jpg" },
+    {
+      name: "Herren Pullover",
+      image: "../assets/images/categories/Sweaters.jpg",
+    },
   ];
 
   return (

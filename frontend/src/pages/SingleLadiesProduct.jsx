@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const SingleLadiesProduct = () => {
@@ -154,12 +154,15 @@ const SingleLadiesProduct = () => {
           <div className="pt-4 border-t">
             <p className="text-sm text-gray-500">Verkäufer: {product.seller}</p>
             <div className="mt-2 text-sm">
-              <a href="/agb" className="text-gray-600 hover:underline mr-4">
+              <Link href="/agb" className="text-gray-600 hover:underline mr-4">
                 AGB
-              </a>
-              <a href="/datenschutz" className="text-gray-600 hover:underline">
+              </Link>
+              <Link
+                href="/datenschutz"
+                className="text-gray-600 hover:underline"
+              >
                 Datenschutz
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const Footer = () => {
   const features = [
     { text: "Sicherer Kauf auf Rechnung", sup: "*" },
@@ -36,12 +37,12 @@ const Footer = () => {
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-6">
           {legalLinks.map((link, index) => (
             <span key={link} className="flex items-center">
-              <a
+              <Link
                 href="#"
                 className="text-gray-500 hover:text-gray-700 text-sm transition-colors"
               >
                 {link}
-              </a>
+              </Link>
               {index < legalLinks.length - 1 && (
                 <span className="mx-2 text-gray-300">·</span>
               )}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const LadiesFashion = () => {
   const recommendations = [
     {
@@ -10,7 +11,7 @@ const LadiesFashion = () => {
       image: "/images/jeansjacke.jpg",
     },
     {
-      tag: "OTTO ÜZ",
+      tag: "Online ÜZ",
       brand: "RWK",
       name: "T-Shirt Damen Shirt ...",
       originalPrice: "€ 29,90",
@@ -26,7 +27,7 @@ const LadiesFashion = () => {
       image: "/images/frontprint-tshirt.jpg",
     },
     {
-      tag: "OTTO ÜZ",
+      tag: "Shop ÜZ",
       brand: "RWK",
       name: "T-Shirt Damen Shirt ...",
       originalPrice: "€ 29,90",
@@ -60,7 +61,7 @@ const LadiesFashion = () => {
           <ul className="space-y-2">
             {categories.map((category, index) => (
               <li key={index}>
-                <a
+                <Link
                   href="#"
                   className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors hover:text-gray-900 group"
                 >
@@ -78,7 +79,7 @@ const LadiesFashion = () => {
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

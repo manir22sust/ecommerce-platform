@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   PencilIcon,
   ShoppingBagIcon,
@@ -118,9 +119,9 @@ const OrderSummary = () => {
       <div className="border-t pt-6 space-y-6">
         <p className="text-sm text-gray-500 text-center">
           Mit Klick auf "Jetzt kaufen" akzeptierst du unsere
-          <a href="#" className="text-blue-600 hover:underline ml-1">
+          <Link href="#" className="text-blue-600 hover:underline ml-1">
             AGB
-          </a>
+          </Link>
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const CategoryNavigation = () => {
   const inspirationCategories = [
     "Damen-Mode",
@@ -25,10 +26,15 @@ const CategoryNavigation = () => {
             <span className="font-semibold text-gray-900">Inspiration</span>
             {inspirationCategories.map((category, index) => (
               <div key={category} className="flex items-center">
-                <span className="text-gray-300">·</span>
-                <a href="#" className="ml-2 text-gray-600 hover:text-otto-red">
+                <Link
+                  href="#"
+                  className="ml-2 text-gray-600 hover:text-shop-red"
+                >
                   {category}
-                </a>
+                </Link>
+                {index !== inspirationCategories.length - 1 && (
+                  <span className="mx-2 text-gray-300">·</span>
+                )}
               </div>
             ))}
           </nav>
@@ -38,22 +44,27 @@ const CategoryNavigation = () => {
         <div className="py-3">
           <nav className="flex items-center flex-wrap space-x-2 text-sm">
             <span className="font-semibold text-gray-900">Multimedia</span>
-            {multimediaCategories.map((category) => (
+            {multimediaCategories.map((category, index) => (
               <div key={category} className="flex items-center">
-                <span className="text-gray-300">·</span>
-                <a href="#" className="ml-2 text-gray-600 hover:text-otto-red">
+                <Link
+                  href="#"
+                  className="ml-2 text-gray-600 hover:text-shop-red"
+                >
                   {category}
-                </a>
+                </Link>
+                {index !== multimediaCategories.length - 1 && (
+                  <span className="mx-2 text-gray-300">·</span>
+                )}
               </div>
             ))}
             <div className="flex items-center">
               <span className="text-gray-300">·</span>
-              <a
+              <Link
                 href="#"
-                className="ml-2 font-semibold text-otto-red hover:text-otto-red-dark"
+                className="ml-2 font-semibold text-shop-red hover:text-shop-red-dark"
               >
                 %Sale%
-              </a>
+              </Link>
             </div>
           </nav>
         </div>

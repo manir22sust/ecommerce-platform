@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const Sidebar = () => {
   const categories = [
     "Damen-Mode",
@@ -18,13 +19,13 @@ const Sidebar = () => {
       <h2 className="text-lg font-semibold mb-4">Kategorien</h2>
       <nav className="space-y-2">
         {categories.map((category) => (
-          <a
+          <Link
             key={category}
             href="#"
             className="block text-gray-700 hover:text-otto-red hover:bg-gray-100 p-2 rounded"
           >
             {category}
-          </a>
+          </Link>
         ))}
       </nav>
     </div>

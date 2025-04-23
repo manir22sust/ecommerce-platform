@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
 const CheckoutComponent = () => {
   const [quantity, setQuantity] = useState(1);
@@ -66,12 +67,12 @@ const CheckoutComponent = () => {
           <span className="text-gray-500 mb-2 sm:mb-0">
             Verkäufer: Zahida Fashion GmbH
           </span>
-          <a
+          <Link
             href="#datenschutz"
             className="text-blue-600 hover:underline cursor-pointer"
           >
             Datenschutz
-          </a>
+          </Link>
         </div>
       </div>
 

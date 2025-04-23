@@ -6,6 +6,7 @@ import {
 } from "@heroicons/react/24/outline";
 import ContactForm from "../components/ContactForm";
 import ServiceGrid from "./ServiceGrid";
+import { Link } from "react-router-dom";
 
 const Service = () => {
   return (
@@ -92,21 +93,21 @@ const Service = () => {
                 </div>
                 <div className="flex items-center">
                   <PhoneIcon className="w-6 h-6 text-blue-600 mr-3" />
-                  <a
+                  <Link
                     href="tel:0800123456789"
                     className="text-gray-700 hover:text-blue-600 transition-colors"
                   >
                     0800 123 456 789
-                  </a>
+                  </Link>
                 </div>
                 <div className="flex items-center">
                   <EnvelopeIcon className="w-6 h-6 text-blue-600 mr-3" />
-                  <a
+                  <Link
                     href="mailto:service@beispielshop.de"
                     className="text-gray-700 hover:text-blue-600 transition-colors"
                   >
                     service@beispielshop.de
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

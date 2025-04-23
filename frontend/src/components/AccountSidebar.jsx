@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   UserCircleIcon,
   DocumentTextIcon,
@@ -28,7 +29,7 @@ const AccountSidebar = () => {
           { name: "Meine Rechnungen", icon: CreditCardIcon },
           { name: "Mein Profil", icon: UserCircleIcon },
         ].map((item) => (
-          <a
+          <Link
             key={item.name}
             href="#"
             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
@@ -39,7 +40,7 @@ const AccountSidebar = () => {
           >
             <item.icon className="w-5 h-5" />
             <span>{item.name}</span>
-          </a>
+          </Link>
         ))}
       </nav>
 

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import {
   ShoppingCartIcon,
@@ -40,12 +41,12 @@ const Navbar = () => {
                 <Bars3Icon className="h-6 w-6" />
               )}
             </button>
-            <a
+            <Link
               href="/"
               className="text-shop-red text-2xl font-bold ml-2 md:ml-0"
             >
               SHOP
-            </a>
+            </Link>
           </div>
 
           {/* Center - Search bar */}
@@ -65,13 +66,13 @@ const Navbar = () => {
             {/* Desktop navigation */}
             <div className="hidden md:flex space-x-4">
               {navItems.map((item) => (
-                <a
+                <Link
                   key={item.name}
                   href={item.href}
                   className="px-3 py-2 rounded-md text-gray-700 hover:text-shop-red hover:bg-gray-50"
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
             </div>
 
@@ -87,20 +88,20 @@ const Navbar = () => {
               {isAccountOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
                   {accountItems.map((item) => (
-                    <a
+                    <Link
                       key={item.name}
                       href={item.href}
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}
             </div>
 
             {/* Shopping cart */}
-            <a
+            <Link
               href="/cart"
               className="p-2 rounded-full hover:bg-gray-100 relative"
             >
@@ -110,7 +111,7 @@ const Navbar = () => {
                   {cartItems}
                 </span>
               )}
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -119,13 +120,13 @@ const Navbar = () => {
           <div className="md:hidden pb-4">
             <div className="px-2 pt-2 space-y-1">
               {navItems.map((item) => (
-                <a
+                <Link
                   key={item.name}
                   href={item.href}
                   className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
               {/* Mobile search */}
               <div className="mt-4 relative">
