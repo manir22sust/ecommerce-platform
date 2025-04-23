@@ -13,13 +13,13 @@ const Navbar = () => {
   const [cartItems] = useState(3);
 
   const navItems = [
-    { name: "Service", href: "#" },
-    { name: "Merkzettel", href: "#" },
+    { name: "Service", href: "/service" },
+    { name: "Merkzettel", href: "/wishlist" },
   ];
 
   const accountItems = [
-    { name: "Mein Profil", href: "#" },
-    { name: "Bestellungen", href: "#" },
+    { name: "Mein Profil", href: "/myprofile" },
+    { name: "Bestellungen", href: "/order" },
     { name: "Abmelden", href: "#" },
   ];
 
@@ -100,7 +100,10 @@ const Navbar = () => {
             </div>
 
             {/* Shopping cart */}
-            <a href="#" className="p-2 rounded-full hover:bg-gray-100 relative">
+            <a
+              href="/cart"
+              className="p-2 rounded-full hover:bg-gray-100 relative"
+            >
               <ShoppingCartIcon className="h-6 w-6 text-gray-600" />
               {cartItems > 0 && (
                 <span className="absolute -top-1 -right-1 bg-shop-red text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">

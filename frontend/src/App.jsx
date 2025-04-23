@@ -22,6 +22,7 @@ import Wishlist from "./pages/Wishlist";
 import Service from "./pages/Service";
 import ThankYou from "./pages/ThankYou";
 import AccountSidebar from "./components/AccountSidebar";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   return (
@@ -53,7 +54,7 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/thank-you" element={<ThankYou />} />
               <Route path="/account" element={<AccountSidebar />} />
-
+              <Route path="/myprofile" element={<MyProfile />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/service" element={<Service />} />
               <Route path="/login" element={<Login />} />
