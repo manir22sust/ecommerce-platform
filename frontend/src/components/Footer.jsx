@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 const Footer = () => {
   const features = [
     { text: "Sicherer Kauf auf Rechnung", sup: "*" },
@@ -8,12 +9,12 @@ const Footer = () => {
   ];
 
   const legalLinks = [
-    "Cookie-Einstellungen",
-    "AGB",
-    "Datenschutz",
-    "Impressum",
-    "Produktsicherheitsrückrufe",
-    "Lob & Kritik",
+    { text: "Cookie-Einstellungen", path: "/cookies" },
+    { text: "AGB", path: "/agb" },
+    { text: "Datenschutz", path: "/datenschutz" },
+    { text: "Widerrufsrecht", path: "/widerruf" },
+    { text: "Produktsicherheitsrückrufe", path: "/rueckrufe" },
+    { text: "Lob & Kritik", path: "/feedback" },
   ];
 
   return (
@@ -22,7 +23,11 @@ const Footer = () => {
         {/* Features Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           {features.map((item, index) => (
-            <div key={index} className="flex items-start space-x-2 group">
+            <div
+              key={index}
+              className="flex items-start space-x-2 group cursor-default"
+              aria-label={item.text}
+            >
               <div className="flex-1">
                 <p className="text-gray-700 font-medium transition-colors group-hover:text-gray-900">
                   {item.text}
@@ -36,15 +41,16 @@ const Footer = () => {
         {/* Legal Links */}
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mb-6">
           {legalLinks.map((link, index) => (
-            <span key={link} className="flex items-center">
+            <span key={link.text} className="flex items-center">
               <Link
-                href="#"
-                className="text-gray-500 hover:text-gray-700 text-sm transition-colors"
+                to={link.path}
+                className="text-gray-500 hover:text-gray-700 text-sm transition-colors px-2 py-1 rounded hover:bg-gray-50"
+                aria-label={link.text}
               >
-                {link}
+                {link.text}
               </Link>
               {index < legalLinks.length - 1 && (
-                <span className="mx-2 text-gray-300">·</span>
+                <span className="text-gray-300 last:hidden">|</span>
               )}
             </span>
           ))}
@@ -58,8 +64,14 @@ const Footer = () => {
         {/* Footnotes */}
         <div className="text-center text-xs text-gray-400 space-y-1">
           <p>
-            <sup>*</sup> Bonität vorausgesetzt, <sup>**</sup> Bonität
-            vorausgesetzt, gegen Aufpreis
+            <sup aria-hidden="true">*</sup>
+            <span className="sr-only">Hinweis 1:</span>
+            Bonität vorausgesetzt
+          </p>
+          <p>
+            <sup aria-hidden="true">**</sup>
+            <span className="sr-only">Hinweis 2:</span>
+            Bonität vorausgesetzt, gegen Aufpreis
           </p>
         </div>
       </div>

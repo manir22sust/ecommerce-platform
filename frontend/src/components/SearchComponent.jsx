@@ -1,35 +1,48 @@
-import { useState, useEffect } from "react";
-import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import {
+  MagnifyingGlassIcon,
+  XMarkIcon,
+  ArrowPathIcon,
+} from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import categories from "../utils/data/Categories";
 
-const SearchComponent = ({ categories = [] }) => {
+const SearchComponent = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasFocus, setHasFocus] = useState(false);
 
-  // Flatten all products with category information
-  const getAllProducts = () => {
-    return categories.flatMap((category) =>
-      category.products.map((product) => ({
-        ...product,
-        categoryName: category.name,
-        categorySlug: category.slug,
-      }))
-    );
-  };
+  // Memoize flattened products
+  const allProducts = useMemo(
+    () =>
+      categories.flatMap((category) =>
+        category.products.map((product) => ({
+          ...product,
+          categoryName: category.name,
+          categorySlug: category.slug,
+        }))
+      ),
+    [categories]
+  );
 
-  // Search through both product names and category names
-  const searchProducts = (query) => {
-    const lowerQuery = query.toLowerCase();
-    return getAllProducts().filter(
-      (product) =>
-        product.name.toLowerCase().includes(lowerQuery) ||
-        product.categoryName.toLowerCase().includes(lowerQuery)
-    );
-  };
+  const searchProducts = useCallback(
+    (query) => {
+      const lowerQuery = query.toLowerCase().trim();
+      if (!lowerQuery) return [];
 
-  const handleSearch = () => {
-    if (!searchQuery) {
+      return allProducts.filter(
+        (product) =>
+          product.name.toLowerCase().includes(lowerQuery) ||
+          product.categoryName.toLowerCase().includes(lowerQuery) ||
+          product.description?.toLowerCase().includes(lowerQuery)
+      );
+    },
+    [allProducts]
+  );
+
+  const handleSearch = useCallback(() => {
+    if (!searchQuery.trim()) {
       setSearchResults([]);
       return;
     }
@@ -39,91 +52,105 @@ const SearchComponent = ({ categories = [] }) => {
       const results = searchProducts(searchQuery);
       setSearchResults(results);
     } catch (error) {
-      console.error("Search failed:", error);
+      console.error("Search error:", error);
+      setSearchResults([]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [searchQuery, searchProducts]);
 
-  const executeSearch = () => {
-    handleSearch();
-  };
   const handleClearSearch = () => {
     setSearchQuery("");
     setSearchResults([]);
   };
 
-  // Auto-search when typing (with slight delay)
+  // Debounced search
   useEffect(() => {
-    if (searchQuery.trim()) {
-      const delaySearch = setTimeout(() => {
-        handleSearch();
-      }, 300);
-      return () => clearTimeout(delaySearch);
-    } else {
-      setSearchResults([]);
+    const delaySearch = setTimeout(handleSearch, 300);
+    return () => clearTimeout(delaySearch);
+  }, [searchQuery, handleSearch]);
+
+  // Keyboard navigation
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") {
+      handleClearSearch();
     }
-  }, [searchQuery]);
+  };
 
   return (
-    <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-      <div className="relative w-full">
-        <div className="relative w-full">
+    <div className="hidden md:flex flex-1 max-w-2xl mx-8 relative">
+      <div
+        className="relative w-full"
+        role="search"
+        aria-label="Website search"
+      >
+        <div className="relative">
           <input
             type="text"
             placeholder="Wonach suchst du?"
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-shop-red disabled:opacity-75"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-shop-red pr-10 transition-all"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && executeSearch()}
-            disabled={isLoading}
-            aria-label="Search input"
+            onKeyDown={handleKeyDown}
+            onFocus={() => setHasFocus(true)}
+            onBlur={() => setTimeout(() => setHasFocus(false), 200)}
+            aria-label="Search products"
+            aria-controls="search-results"
+            aria-expanded={searchResults.length > 0}
           />
 
-          <button
-            onClick={searchQuery ? handleClearSearch : executeSearch}
-            className="absolute right-3 top-3 hover:text-shop-red transition-colors"
-            disabled={isLoading}
-            aria-label={searchQuery ? "Clear search" : "Search"}
-          >
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
             {isLoading ? (
-              <span className="animate-spin">🌀</span>
+              <ArrowPathIcon className="h-5 w-5 text-gray-400 animate-spin" />
             ) : searchQuery ? (
-              <XMarkIcon className="h-5 w-5 text-gray-400" />
+              <button
+                onClick={handleClearSearch}
+                className="hover:text-shop-red transition-colors"
+                aria-label="Clear search"
+              >
+                <XMarkIcon className="h-5 w-5" />
+              </button>
             ) : (
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
             )}
-          </button>
+          </div>
         </div>
 
         {/* Search results dropdown */}
-        {searchResults.length > 0 && (
-          <div className="absolute w-full mt-2 bg-white border rounded-md shadow-lg z-50 max-h-96 overflow-y-auto">
+        {hasFocus && searchResults.length > 0 && (
+          <div
+            id="search-results"
+            className="absolute w-full mt-2 bg-white border rounded-md shadow-lg z-50 max-h-96 overflow-y-auto"
+            role="listbox"
+          >
             <ul className="py-2">
               {searchResults.map((product) => (
-                <li key={product.id} className="list-none">
+                <li
+                  key={`${product.categorySlug}-${product.id}`}
+                  role="option"
+                  aria-selected="false"
+                >
                   <Link
-                    to={`/${product.categorySlug}/${product.slug}`}
-                    onClick={() => {
-                      setSearchResults([]);
-                      setSearchQuery("");
-                    }}
-                    className="flex items-center px-4 py-3 hover:bg-gray-100 cursor-pointer transition-colors"
-                    aria-label={`View ${product.name}`}
+                    to={`/products/${product.slug}`}
+                    onClick={handleClearSearch}
+                    className="flex items-center px-4 py-3 hover:bg-gray-50 gap-4 transition-colors group"
                   >
                     <img
                       src={product.image}
-                      alt={product.name}
+                      alt=""
                       className="w-12 h-12 object-cover rounded-md"
+                      loading="lazy"
+                      aria-hidden="true"
                     />
-                    <div className="ml-4">
-                      <div className="font-medium text-gray-900">
-                        {product.name}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-900 truncate">
+                        {highlightMatches(product.name, searchQuery)}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-gray-500 flex items-center gap-2">
                         <span>{product.categoryName}</span>
-                        <span className="mx-2">•</span>
-                        <span>€{product.price.toFixed(2)}</span>
+                        <span className="text-shop-red font-bold">
+                          €{product.price.toFixed(2)}
+                        </span>
                       </div>
                     </div>
                   </Link>
@@ -134,13 +161,40 @@ const SearchComponent = ({ categories = [] }) => {
         )}
 
         {/* Empty state */}
-        {searchQuery && !isLoading && searchResults.length === 0 && (
-          <div className="absolute w-full mt-2 bg-white border rounded-md shadow-lg z-50 p-4 text-gray-500">
-            Keine Ergebnisse gefunden für "{searchQuery}"
-          </div>
-        )}
+        {hasFocus &&
+          searchQuery &&
+          !isLoading &&
+          searchResults.length === 0 && (
+            <div
+              className="absolute w-full mt-2 bg-white border rounded-md shadow-lg z-50 p-4 text-gray-500"
+              role="status"
+            >
+              Keine Ergebnisse für "{searchQuery}"
+              <Link
+                to="/kontakt"
+                className="block mt-2 text-shop-red hover:underline"
+              >
+                Kontaktieren Sie uns
+              </Link>
+            </div>
+          )}
       </div>
     </div>
+  );
+};
+
+// Helper function to highlight matches
+const highlightMatches = (text, query) => {
+  if (!query) return text;
+  const regex = new RegExp(`(${query})`, "gi");
+  return text.split(regex).map((part, i) =>
+    i % 2 === 0 ? (
+      part
+    ) : (
+      <span key={i} className="bg-yellow-100">
+        {part}
+      </span>
+    )
   );
 };
 

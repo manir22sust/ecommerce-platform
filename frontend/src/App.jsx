@@ -26,6 +26,13 @@ import MyProfile from "./pages/MyProfile";
 import CategoryPage from "./pages/CategoryPage";
 import SalePage from "./pages/SalePage";
 import NotFound from "./components/NotFound";
+import SingleProduct from "./pages/SingleProduct";
+import AllCategoriesPage from "./pages/AllCategoriesPage";
+import ContactPage from "./pages/ContactPage";
+import AGBPage from "./pages/AGBPage";
+import DatenschutzPage from "./pages/DatenschutzPage";
+import WiderrufPage from "./pages/WiderrufPage";
+import CookieSettingsPage from "./pages/CookieSettingsPage";
 
 function App() {
   return (
@@ -50,10 +57,14 @@ function App() {
               />
               {/* <Route path="/ladies-fashion/:slug" element={<SingleLadiesProduct />} /> */}
               <Route path="/product-details" element={<ProductDetails />} />
-
+              <Route path="/categories" element={<AllCategoriesPage />} />
               <Route
                 path="/categories/:categorySlug"
                 element={<CategoryPage />}
+              />
+              <Route
+                path="/products/:productSlug"
+                element={<SingleProduct />}
               />
               <Route path="/sale" element={<SalePage />} />
               <Route path="/cart" element={<Cart />} />
@@ -68,6 +79,11 @@ function App() {
               <Route path="/service" element={<Service />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/kontakt" element={<ContactPage />} />
+              <Route path="/agb" element={<AGBPage />} />
+              <Route path="/datenschutz" element={<DatenschutzPage />} />
+              <Route path="/widerruf" element={<WiderrufPage />} />
+              <Route path="/cookies" element={<CookieSettingsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

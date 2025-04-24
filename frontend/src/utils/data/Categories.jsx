@@ -2,6 +2,7 @@ const categories = [
   {
     slug: "damen-mode",
     name: "Damen-Mode",
+    image: "../assets/images/categories/Jackets-v1.jpg",
     products: [
       {
         id: 1,
@@ -22,6 +23,8 @@ const categories = [
   {
     slug: "herren-mode",
     name: "Herren-Mode",
+    image: "../assets/images/categories/Jackets-v1.jpg",
+
     products: [
       {
         id: 3,
