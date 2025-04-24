@@ -42,7 +42,7 @@ const Navbar = () => {
               )}
             </button>
             <Link
-              href="/"
+              to="/"
               className="text-shop-red text-2xl font-bold ml-2 md:ml-0"
             >
               SHOP
@@ -68,7 +68,7 @@ const Navbar = () => {
               {navItems.map((item) => (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className="px-3 py-2 rounded-md text-gray-700 hover:text-shop-red hover:bg-gray-50"
                 >
                   {item.name}
@@ -90,8 +90,9 @@ const Navbar = () => {
                   {accountItems.map((item) => (
                     <Link
                       key={item.name}
-                      href={item.href}
+                      to={item.href}
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsAccountOpen(false)}
                     >
                       {item.name}
                     </Link>
@@ -102,7 +103,7 @@ const Navbar = () => {
 
             {/* Shopping cart */}
             <Link
-              href="/cart"
+              to="/cart"
               className="p-2 rounded-full hover:bg-gray-100 relative"
             >
               <ShoppingCartIcon className="h-6 w-6 text-gray-600" />
@@ -122,7 +123,7 @@ const Navbar = () => {
               {navItems.map((item) => (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
                 >
                   {item.name}

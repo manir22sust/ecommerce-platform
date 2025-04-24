@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         "shop-red": "#e3000f",
+        "shop-red-dark": "#b91c1c",
       },
     },
   },

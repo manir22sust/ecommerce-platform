@@ -16,6 +16,19 @@ const CategoryNavigation = () => {
     "Baumarkt",
     "Marken",
   ];
+  // Helper function to generate URL-friendly slugs
+  const createSlug = (category) => {
+    return category
+      .toLowerCase()
+      .replace(/ä/g, "ae")
+      .replace(/ö/g, "oe")
+      .replace(/ü/g, "ue")
+      .replace(/ß/g, "ss")
+      .replace(/&/g, "und")
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9\-]/g, "")
+      .trim();
+  };
 
   return (
     <div className="bg-white shadow-sm">
@@ -27,7 +40,7 @@ const CategoryNavigation = () => {
             {inspirationCategories.map((category, index) => (
               <div key={category} className="flex items-center">
                 <Link
-                  href="#"
+                  to={`/categories/${createSlug(category)}`}
                   className="ml-2 text-gray-600 hover:text-shop-red"
                 >
                   {category}
@@ -47,7 +60,7 @@ const CategoryNavigation = () => {
             {multimediaCategories.map((category, index) => (
               <div key={category} className="flex items-center">
                 <Link
-                  href="#"
+                  to={`/categories/${createSlug(category)}`}
                   className="ml-2 text-gray-600 hover:text-shop-red"
                 >
                   {category}
@@ -60,7 +73,7 @@ const CategoryNavigation = () => {
             <div className="flex items-center">
               <span className="text-gray-300">·</span>
               <Link
-                href="#"
+                to="/sale"
                 className="ml-2 font-semibold text-shop-red hover:text-shop-red-dark"
               >
                 %Sale%

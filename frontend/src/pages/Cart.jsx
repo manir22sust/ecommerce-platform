@@ -45,7 +45,7 @@ const Cart = () => {
         <div className="flex flex-col md:flex-row gap-6">
           <div className="relative">
             <img
-              src="/tshirt.jpg"
+              src="../assets/images/categories/Jackets-v1.jpg"
               alt="RMK T-Shirt"
               className="w-48 h-48 object-contain bg-gray-50 p-4 rounded-xl"
             />

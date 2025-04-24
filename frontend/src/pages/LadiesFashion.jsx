@@ -8,7 +8,7 @@ const LadiesFashion = () => {
       originalPrice: "€ 49,99",
       price: "€ 24,99",
       discount: "nur heute",
-      image: "/images/jeansjacke.jpg",
+      image: "../assets/images/categories/Jackets-v1.jpg",
     },
     {
       tag: "Online ÜZ",
@@ -16,7 +16,7 @@ const LadiesFashion = () => {
       name: "T-Shirt Damen Shirt ...",
       originalPrice: "€ 29,90",
       price: "€ 9,90",
-      image: "/images/tshirt.jpg",
+      image: "../assets/images/categories/Wardrobes.jpg",
     },
     {
       tag: "Schr. beliebt",
@@ -24,7 +24,7 @@ const LadiesFashion = () => {
       name: "T-Shirt mit Frontdru...",
       price: "€ 19,99",
       details: "(€ 19,99 / 18kl)",
-      image: "/images/frontprint-tshirt.jpg",
+      image: "../assets/images/categories/Bedding-v1.jpg",
     },
     {
       tag: "Shop ÜZ",
@@ -32,7 +32,7 @@ const LadiesFashion = () => {
       name: "T-Shirt Damen Shirt ...",
       originalPrice: "€ 29,90",
       price: "€ 9,90",
-      image: "/images/tshirt.jpg",
+      image: "../assets/images/categories/Sweaters.jpg",
     },
     // Add other products similarly
   ];

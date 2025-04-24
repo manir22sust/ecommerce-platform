@@ -23,6 +23,9 @@ import Service from "./pages/Service";
 import ThankYou from "./pages/ThankYou";
 import AccountSidebar from "./components/AccountSidebar";
 import MyProfile from "./pages/MyProfile";
+import CategoryPage from "./pages/CategoryPage";
+import SalePage from "./pages/SalePage";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -47,6 +50,12 @@ function App() {
               />
               {/* <Route path="/ladies-fashion/:slug" element={<SingleLadiesProduct />} /> */}
               <Route path="/product-details" element={<ProductDetails />} />
+
+              <Route
+                path="/categories/:categorySlug"
+                element={<CategoryPage />}
+              />
+              <Route path="/sale" element={<SalePage />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/order" element={<OrderSummary />} />
               {/*       <Route path="/order" element={<OrderSummary />} /> */}
@@ -59,6 +68,7 @@ function App() {
               <Route path="/service" element={<Service />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </main>

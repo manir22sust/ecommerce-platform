@@ -9,7 +9,7 @@ const Wishlist = () => {
       price: 15.8,
       originalPrice: 19.99,
       size: "Weiß-Schwarz, 34",
-      image: "https://via.placeholder.com/150x200?text=Product+Image",
+      image: "../assets/images/categories/Jackets-v1.jpg",
       liked: true,
     },
     // Add more items as needed

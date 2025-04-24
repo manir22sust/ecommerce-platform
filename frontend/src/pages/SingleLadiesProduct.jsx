@@ -40,7 +40,7 @@ const SingleLadiesProduct = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Breadcrumb */}
       <nav className="text-sm mb-4">
-        <span className="text-gray-500">
+        <span className="text-gray-500 ">
           Startseite / Damen-Mode / Bekleidung / Shirts / T-Shirts
         </span>
       </nav>
@@ -49,9 +49,9 @@ const SingleLadiesProduct = () => {
         {/* Product Images */}
         <div className="bg-gray-100 p-8 rounded-lg">
           <img
-            src="/placeholder-tshirt.jpg"
+            src="../assets/images/categories/Jackets-v1.jpg"
             alt={product.title}
-            className="w-full h-auto object-contain"
+            className="w-full h-auto object-cover rounded-lg mb-4"
           />
         </div>
 
