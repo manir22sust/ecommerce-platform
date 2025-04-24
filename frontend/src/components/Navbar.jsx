@@ -7,6 +7,8 @@ import {
   XMarkIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import SearchComponent from "./SearchComponent";
+import categories from "../utils/data/Categories";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,7 +52,7 @@ const Navbar = () => {
           </div>
 
           {/* Center - Search bar */}
-          <div className="hidden md:flex flex-1 max-w-2xl mx-8">
+          {/*  <div className="hidden md:flex flex-1 max-w-2xl mx-8">
             <div className="relative w-full">
               <input
                 type="text"
@@ -59,7 +61,8 @@ const Navbar = () => {
               />
               <MagnifyingGlassIcon className="h-5 w-5 absolute right-3 top-3 text-gray-400" />{" "}
             </div>
-          </div>
+          </div> */}
+          <SearchComponent categories={categories} />
 
           {/* Right section - Navigation items */}
           <div className="flex items-center space-x-4">
