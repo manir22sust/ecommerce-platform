@@ -34,6 +34,7 @@ import DatenschutzPage from "./pages/DatenschutzPage";
 import WiderrufPage from "./pages/WiderrufPage";
 import CookieSettingsPage from "./pages/CookieSettingsPage";
 import Category from "./pages/Category";
+import CategoriesList from "./pages/CategoriesList";
 
 function App() {
   return (
@@ -86,6 +87,8 @@ function App() {
               <Route path="/datenschutz" element={<DatenschutzPage />} />
               <Route path="/widerruf" element={<WiderrufPage />} />
               <Route path="/cookies" element={<CookieSettingsPage />} />
+              {/* test data */}
+              <Route path="/categories-list" element={<CategoriesList />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
