@@ -33,6 +33,7 @@ import AGBPage from "./pages/AGBPage";
 import DatenschutzPage from "./pages/DatenschutzPage";
 import WiderrufPage from "./pages/WiderrufPage";
 import CookieSettingsPage from "./pages/CookieSettingsPage";
+import Category from "./pages/Category";
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
                 path="/categories/:categorySlug"
                 element={<CategoryPage />}
               />
+              <Route path="/category/:categorySlug" element={<Category />} />
               <Route
                 path="/products/:productSlug"
                 element={<SingleProduct />}
