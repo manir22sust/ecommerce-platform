@@ -5,6 +5,8 @@ import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import connectDB from "./config/db.js";
+import seedRoutes from "./routes/seedRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -23,6 +25,10 @@ app.use("/api/posts", postRoutes);
 
 // product routes
 app.use("/api/products", productRoutes);
+
+// category routes
+app.use("/api/categories", categoryRoutes);
+app.use("/api", seedRoutes);
 
 // Connect to MongoDB
 connectDB();
