@@ -8,12 +8,19 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import SearchComponent from "./SearchComponent";
-import categories from "../utils/data/Categories";
+//import categories from "../utils/data/Categories";
+import useCategories from "../hooks/useCategories";
+import { useCart } from "../hooks/useCart";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [cartItems] = useState(3);
+  const { totalQuantity } = useCart();
+  const { categories, loading, error } = useCategories();
+
+  if (loading) return <div>Loading categories...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   const navItems = [
     { name: "Service", href: "/service" },
@@ -110,9 +117,9 @@ const Navbar = () => {
               className="p-2 rounded-full hover:bg-gray-100 relative"
             >
               <ShoppingCartIcon className="h-6 w-6 text-gray-600" />
-              {cartItems > 0 && (
+              {totalQuantity > 0 && (
                 <span className="absolute -top-1 -right-1 bg-shop-red text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                  {cartItems}
+                  {totalQuantity}
                 </span>
               )}
             </Link>

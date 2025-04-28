@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
-import categories from "../utils/data/Categories";
+// import categories from "../utils/data/Categories";
+import useCategories from "../hooks/useCategories";
 
 const AllCategoriesPage = () => {
+  const { categories, loading, error } = useCategories();
+
+  if (loading) return <div>Loading categories...</div>;
+  if (error) return <div>Error: {error}</div>;
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Breadcrumb */}

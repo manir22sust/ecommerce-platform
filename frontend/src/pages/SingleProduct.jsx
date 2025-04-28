@@ -1,8 +1,14 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import categories from "../utils/data/Categories";
+// import categories from "../utils/data/Categories";
+import useCategories from "../hooks/useCategories";
 
 const SingleProduct = () => {
+ const {
+   categories,
+   loading: categoriesLoading,
+   error: categoriesError,
+ } = useCategories();
   const { productSlug } = useParams();
   const [product, setProduct] = useState(null);
   const [category, setCategory] = useState(null);
@@ -20,29 +26,37 @@ const SingleProduct = () => {
   };
 
   useEffect(() => {
+    // Wait until categories are loaded
+    if (categoriesLoading) return;
+
+    // Handle categories fetch error
+    if (categoriesError) {
+      setError(true);
+      setLoading(false);
+      return;
+    }
+
     let foundProduct = null;
     let foundCategory = null;
 
-    // Simulate API call delay
-    setTimeout(() => {
-      categories.forEach((cat) => {
-        const prod = cat.products.find((p) => p.slug === productSlug);
-        if (prod) {
-          foundProduct = { ...prod, category: cat.slug };
-          foundCategory = cat;
-        }
-      });
-
-      if (foundProduct && foundCategory) {
-        setProduct(foundProduct);
-        setCategory(foundCategory);
-        setError(false);
-      } else {
-        setError(true);
+    // Search for the product in fetched categories
+    categories.forEach((cat) => {
+      const prod = cat.products.find((p) => p.slug === productSlug);
+      if (prod) {
+        foundProduct = { ...prod, category: cat.slug };
+        foundCategory = cat;
       }
-      setLoading(false);
-    }, 500);
-  }, [productSlug]);
+    });
+
+    if (foundProduct && foundCategory) {
+      setProduct(foundProduct);
+      setCategory(foundCategory);
+      setError(false);
+    } else {
+      setError(true);
+    }
+    setLoading(false);
+  }, [productSlug, categories, categoriesLoading, categoriesError]);
 
   const handleAddToCart = () => {
     if (product.sizes && !selectedSize && !selectedColor) {

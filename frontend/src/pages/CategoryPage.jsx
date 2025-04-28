@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import categories from "../utils/data/Categories";
+// import categories from "../utils/data/Categories";
 import { ImSpinner8 } from "react-icons/im";
 import NotFound from "../components/NotFound";
+import useCategories from "../hooks/useCategories";
 
 const CategoryPage = () => {
+  const { categories, error } = useCategories();
+
+  if (error) return <div>Error: {error}</div>;
+
   const { categorySlug } = useParams();
   const [categoryData, setCategoryData] = useState(null);
   const [loading, setLoading] = useState(true);

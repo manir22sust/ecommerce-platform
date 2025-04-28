@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
-import categories from "../utils/data/Categories";
+// import categories from "../utils/data/Categories";
 // Import images
 import BedImage from "../assets/images/categories/Beds.jpg";
 import JacketImage from "../assets/images/categories/Jackets-v1.jpg";
 import WardrobeImage from "../assets/images/categories/Wardrobes.jpg";
 import BeddingImage from "../assets/images/categories/Bedding.jpg";
 import SweaterImage from "../assets/images/categories/Sweaters.jpg";
+import useCategories from "../hooks/useCategories";
 
 const CategoryPromotion = () => {
+  const { categories, loading, error } = useCategories();
+
+  if (loading) return <div>Loading categories...</div>;
+  if (error) return <div>Error: {error}</div>;
   // Map images to categories
   const categoryImages = {
     moebel: BedImage,

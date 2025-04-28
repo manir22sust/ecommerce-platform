@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
-import categories from "../utils/data/Categories"; // Import your categories data
+//import categories from "../utils/data/Categories"; // Import your categories data
+import useCategories from "../hooks/useCategories";
 
 const OutfitRecommendations = () => {
+  const { categories, loading, error } = useCategories();
+
+  if (loading) return <div>Loading categories...</div>;
+  if (error) return <div>Error: {error}</div>;
   // Get actual products from categories
   const getRandomProducts = () => {
     const allProducts = categories.flatMap((category) => category.products);
