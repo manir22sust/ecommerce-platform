@@ -1,15 +1,27 @@
+// Login.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useUser();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from || "/";
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // TODO: Add real login logic
-    console.log("Logging in with", { email, password });
+    try {
+      await login(email, password);
+      navigate(from, { replace: true });
+    } catch (error) {
+      alert("Anmeldung fehlgeschlagen: " + error.message);
+    }
   };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-md p-6 rounded-md shadow-md">
@@ -53,7 +65,7 @@ const Login = () => {
             </label>
           </div>
           <div className="mb-4">
-            <Link href="#" className="text-blue-600 text-sm">
+            <Link to="/forgot-password" className="text-blue-600 text-sm">
               Passwort vergessen / Probleme bei der Anmeldung
             </Link>
           </div>
@@ -64,9 +76,12 @@ const Login = () => {
             Anmelden
           </button>
         </form>
-        <button className="w-full mt-4 bg-gray-200 py-2 rounded-md text-sm font-medium">
+        <Link
+          to="/register"
+          className="w-full mt-4 block text-center bg-gray-200 py-2 rounded-md text-sm font-medium"
+        >
           Neu bei SHOP? Jetzt registrieren
-        </button>
+        </Link>
       </div>
     </div>
   );

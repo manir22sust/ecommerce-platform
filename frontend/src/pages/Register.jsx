@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useUser } from "../hooks/useUser";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const { login } = useUser();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     gender: "",
     firstName: "",
@@ -14,6 +18,7 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordRepeat, setShowPasswordRepeat] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -21,13 +26,67 @@ const Register = () => {
       ...form,
       [name]: type === "checkbox" ? checked : value,
     });
+    // Clear error when user starts typing
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Required fields
+    if (!form.gender) newErrors.gender = "Bitte wählen Sie eine Anrede aus";
+    if (!form.firstName.trim())
+      newErrors.firstName = "Vorname ist erforderlich";
+    if (!form.lastName.trim()) newErrors.lastName = "Nachname ist erforderlich";
+
+    // Email validation
+    if (!form.email) {
+      newErrors.email = "E-Mail ist erforderlich";
+    } else if (!emailRegex.test(form.email)) {
+      newErrors.email = "Ungültige E-Mail-Adresse";
+    }
+
+    // Email match
+    if (form.email !== form.emailRepeat) {
+      newErrors.emailRepeat = "E-Mail-Adressen stimmen nicht überein";
+    }
+
+    // Password validation
+    if (!form.password) {
+      newErrors.password = "Passwort ist erforderlich";
+    } else if (form.password.length < 8) {
+      newErrors.password = "Mindestens 8 Zeichen erforderlich";
+    }
+
+    // Password match
+    if (form.password !== form.passwordRepeat) {
+      newErrors.passwordRepeat = "Passwörter stimmen nicht überein";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Add form validation and submit logic
-    console.log("Form submitted:", form);
+    if (!validateForm()) return;
+
+    // Create user object and login
+    const userData = {
+      email: form.email,
+      firstName: form.firstName,
+      lastName: form.lastName,
+      gender: form.gender,
+      newsletter: form.newsletter,
+    };
+
+    login(userData);
+    // Here you would typically redirect to another page
+    console.log("Registration successful:", userData);
+    navigate("/login");
   };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-lg p-6 rounded-md shadow-md">
@@ -35,78 +94,95 @@ const Register = () => {
           Jetzt Kundenkonto anlegen
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div className="flex space-x-4 justify-center">
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="Frau"
-                onChange={handleChange}
-              />
-              <span className="ml-1">Frau</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="Herr"
-                onChange={handleChange}
-              />
-              <span className="ml-1">Herr</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="Keine Angabe"
-                onChange={handleChange}
-              />
-              <span className="ml-1">Keine Angabe</span>
-            </label>
+            {["Frau", "Herr", "Keine Angabe"].map((gender) => (
+              <label key={gender} className="flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value={gender}
+                  checked={form.gender === gender}
+                  onChange={handleChange}
+                  className="mr-1"
+                />
+                <span>{gender}</span>
+              </label>
+            ))}
+          </div>
+          {errors.gender && (
+            <p className="text-red-500 text-sm text-center">{errors.gender}</p>
+          )}
+
+          <div>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="Vorname"
+              className={`w-full border px-4 py-2 rounded-md ${
+                errors.firstName ? "border-red-500" : ""
+              }`}
+              onChange={handleChange}
+            />
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName}</p>
+            )}
           </div>
 
-          <input
-            type="text"
-            name="firstName"
-            placeholder="Vorname"
-            className="w-full border px-4 py-2 rounded-md"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Nachname"
-            className="w-full border px-4 py-2 rounded-md"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="E-Mail-Adresse"
-            className="w-full border px-4 py-2 rounded-md"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="emailRepeat"
-            placeholder="E-Mail-Adresse wiederholen"
-            className="w-full border px-4 py-2 rounded-md"
-            onChange={handleChange}
-            required
-          />
+          <div>
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Nachname"
+              className={`w-full border px-4 py-2 rounded-md ${
+                errors.lastName ? "border-red-500" : ""
+              }`}
+              onChange={handleChange}
+            />
+            {errors.lastName && (
+              <p className="text-red-500 text-sm">{errors.lastName}</p>
+            )}
+          </div>
+
+          <div>
+            <input
+              type="email"
+              name="email"
+              placeholder="E-Mail-Adresse"
+              className={`w-full border px-4 py-2 rounded-md ${
+                errors.email ? "border-red-500" : ""
+              }`}
+              onChange={handleChange}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
+          </div>
+
+          <div>
+            <input
+              type="email"
+              name="emailRepeat"
+              placeholder="E-Mail-Adresse wiederholen"
+              className={`w-full border px-4 py-2 rounded-md ${
+                errors.emailRepeat ? "border-red-500" : ""
+              }`}
+              onChange={handleChange}
+            />
+            {errors.emailRepeat && (
+              <p className="text-red-500 text-sm">{errors.emailRepeat}</p>
+            )}
+          </div>
 
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Passwort"
-              className="w-full border px-4 py-2 rounded-md"
+              className={`w-full border px-4 py-2 rounded-md ${
+                errors.password ? "border-red-500" : ""
+              }`}
               onChange={handleChange}
-              required
             />
             <button
               type="button"
@@ -115,7 +191,16 @@ const Register = () => {
             >
               {showPassword ? "Verbergen" : "Anzeigen"}
             </button>
-            <p className="text-sm text-gray-500 mt-1">Mindestens 8 Zeichen</p>
+            <p
+              className={`text-sm mt-1 ${
+                errors.password ? "text-red-500" : "text-gray-500"
+              }`}
+            >
+              Mindestens 8 Zeichen
+            </p>
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           <div className="relative">
@@ -123,9 +208,10 @@ const Register = () => {
               type={showPasswordRepeat ? "text" : "password"}
               name="passwordRepeat"
               placeholder="Passwort wiederholen"
-              className="w-full border px-4 py-2 rounded-md"
+              className={`w-full border px-4 py-2 rounded-md ${
+                errors.passwordRepeat ? "border-red-500" : ""
+              }`}
               onChange={handleChange}
-              required
             />
             <button
               type="button"
@@ -134,6 +220,9 @@ const Register = () => {
             >
               {showPasswordRepeat ? "Verbergen" : "Anzeigen"}
             </button>
+            {errors.passwordRepeat && (
+              <p className="text-red-500 text-sm">{errors.passwordRepeat}</p>
+            )}
           </div>
 
           <div className="flex items-start space-x-2">
@@ -157,7 +246,7 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full bg-red-600 text-white py-2 rounded-md font-semibold"
+            className="w-full bg-red-600 text-white py-2 rounded-md font-semibold hover:bg-red-700 transition-colors"
           >
             Weiter
           </button>

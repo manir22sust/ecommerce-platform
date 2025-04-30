@@ -2,13 +2,15 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import categories from "../utils/data/Categories";
 import useCategories from "../hooks/useCategories";
+import { useCart } from "../hooks/useCart";
 
 const SingleProduct = () => {
- const {
-   categories,
-   loading: categoriesLoading,
-   error: categoriesError,
- } = useCategories();
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useCategories();
+  const { addItem } = useCart();
   const { productSlug } = useParams();
   const [product, setProduct] = useState(null);
   const [category, setCategory] = useState(null);
@@ -69,6 +71,46 @@ const SingleProduct = () => {
       selectedSize,
       selectedColor,
     });
+    if (
+      (product.sizes && !selectedSize) ||
+      (product.colors && !selectedColor)
+    ) {
+      alert("Bitte wählen Sie alle erforderlichen Optionen aus");
+      return;
+    }
+
+    if (product.stock < quantity) {
+      alert(`Nur noch ${product.stock} Stück verfügbar`);
+      return;
+    }
+    // Create cart item object
+    const cartItem = {
+      id: product.id,
+      slug: product.slug,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice || null,
+      image: product.images?.[0] || product.image,
+      quantity: quantity,
+      selectedSize: product.sizes ? selectedSize : null,
+      selectedColor: product.colors ? selectedColor : null,
+      category: category.slug,
+      maxStock: product.stock,
+      variantIdentifier: `${product.id}-${selectedSize || "no-size"}-${
+        selectedColor || "no-color"
+      }`,
+    };
+
+    // Add to cart (using your cart context)
+    addItem(cartItem);
+
+    // Optional: Reset selections
+    setSelectedSize("");
+    setSelectedColor("");
+    setQuantity(1);
+
+    // Show success feedback
+    alert(`${product.name} wurde dem Warenkorb hinzugefügt!`);
   };
 
   const calculateDiscount = () => {

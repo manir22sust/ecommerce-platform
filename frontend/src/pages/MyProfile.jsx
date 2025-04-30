@@ -1,35 +1,84 @@
 import { useState, useEffect } from "react";
 import { PencilIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-
+import { useUser } from "../hooks/useUser";
 const MyProfile = () => {
+  const { user, updateUser, updateAddress } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: "Max Mustermann",
-    email: "max@example.com",
-    phone: "+49 123 456789",
-    address: "Musterstraße 1, 12345 Berlin",
+    name: "",
+    email: "",
+    phone: "",
+    address: {
+      street: "",
+      postalCode: "",
+      city: "",
+      country: "Germany",
+    },
+  });
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 1000);
-  }, []);
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        address: {
+          street: user.address?.street || "",
+          postalCode: user.address?.postalCode || "",
+          city: user.address?.city || "",
+          country: user.address?.country || "Germany",
+        },
+      });
+      setIsLoading(false);
+    }
+  }, [user]);
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name.startsWith("address.")) {
+      const field = name.split(".")[1];
+      setFormData((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          [field]: value,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Update general user info
+      await updateUser({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      });
+
+      // Update address separately
+      await updateAddress(formData.address);
+
       setSuccess("Profil erfolgreich aktualisiert");
       setIsEditing(false);
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      setError("Fehler beim Speichern der Änderungen");
+      setError(err.message || "Fehler beim Speichern der Änderungen");
     }
   };
 
@@ -138,7 +187,7 @@ const MyProfile = () => {
                 )}
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Adresse
                 </label>
@@ -153,6 +202,91 @@ const MyProfile = () => {
                 ) : (
                   <p className="px-4 py-2 text-gray-900">{formData.address}</p>
                 )}
+              </div> */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Street Field */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Straße und Hausnummer
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="address.street"
+                      value={formData.address.street}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border rounded-md focus:ring-shop-red focus:border-shop-red"
+                    />
+                  ) : (
+                    <p className="px-4 py-2 text-gray-900">
+                      {formData.address.street}
+                    </p>
+                  )}
+                </div>
+
+                {/* Postal Code Field */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Postleitzahl
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="address.postalCode"
+                      value={formData.address.postalCode}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border rounded-md focus:ring-shop-red focus:border-shop-red"
+                      pattern="\d{5}"
+                    />
+                  ) : (
+                    <p className="px-4 py-2 text-gray-900">
+                      {formData.address.postalCode}
+                    </p>
+                  )}
+                </div>
+
+                {/* City Field */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Stadt
+                  </label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="address.city"
+                      value={formData.address.city}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border rounded-md focus:ring-shop-red focus:border-shop-red"
+                    />
+                  ) : (
+                    <p className="px-4 py-2 text-gray-900">
+                      {formData.address.city}
+                    </p>
+                  )}
+                </div>
+
+                {/* Country Field */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Land
+                  </label>
+                  {isEditing ? (
+                    <select
+                      name="address.country"
+                      value={formData.address.country}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border rounded-md focus:ring-shop-red focus:border-shop-red"
+                    >
+                      <option value="Germany">Deutschland</option>
+                      <option value="Austria">Österreich</option>
+                      <option value="Switzerland">Schweiz</option>
+                    </select>
+                  ) : (
+                    <p className="px-4 py-2 text-gray-900">
+                      {formData.address.country}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
 

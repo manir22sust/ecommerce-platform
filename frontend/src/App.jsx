@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CategoryNavigation from "./components/CategoryNavigation";
 /* import OrderSummary from "./components/OrderSummary"; */
+import OrderConfirmatiom from "./components/OrderConfirmation";
 
 // Pages
 import Home from "./pages/Home";
@@ -71,10 +72,15 @@ function App() {
               />
               <Route path="/sale" element={<SalePage />} />
               <Route path="/cart" element={<Cart />} />
+
               <Route path="/order" element={<OrderSummary />} />
               {/*       <Route path="/order" element={<OrderSummary />} /> */}
               <Route path="/checkout-cart" element={<CheckoutComponent />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route
+                path="/order-confirmation"
+                element={<OrderConfirmatiom />}
+              />
               <Route path="/thank-you" element={<ThankYou />} />
               <Route path="/account" element={<AccountSidebar />} />
               <Route path="/myprofile" element={<MyProfile />} />
