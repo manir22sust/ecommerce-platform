@@ -14,6 +14,12 @@ export const loginUser = async (email, password) => {
       throw new Error(data.error || "Login failed");
     }
 
+    // Validate and store the token
+    if (!data.token) {
+      throw new Error("Authentication token missing in response");
+    }
+    localStorage.setItem("token", data.token);
+
     return data;
   } catch (error) {
     console.error("Login error:", error.message);
