@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { PencilIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useUser } from "../hooks/useUser";
+
 const MyProfile = () => {
   const { user, updateUser, updateAddress } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     address: {
@@ -27,7 +29,8 @@ const MyProfile = () => {
   useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
         email: user.email || "",
         phone: user.phone || "",
         address: {
@@ -64,14 +67,15 @@ const MyProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Update general user info
+      // Update user info
       await updateUser({
-        name: formData.name,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email,
         phone: formData.phone,
       });
 
-      // Update address separately
+      // Update address
       await updateAddress(formData.address);
 
       setSuccess("Profil erfolgreich aktualisiert");
@@ -83,16 +87,7 @@ const MyProfile = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="animate-pulse space-y-6 p-6">
-        <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-        <div className="space-y-4">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-4 bg-gray-200 rounded w-1/2"></div>
-          ))}
-        </div>
-      </div>
-    );
+    return <div className="animate-pulse space-y-6 p-6">Loading...</div>;
   }
 
   return (
@@ -111,25 +106,18 @@ const MyProfile = () => {
       </div>
 
       {error && (
-        <div
-          role="alert"
-          className="mb-4 p-4 bg-red-50 text-red-700 rounded-lg"
-        >
+        <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">
           {error}
         </div>
       )}
 
       {success && (
-        <div
-          role="alert"
-          className="mb-4 p-4 bg-green-50 text-green-700 rounded-lg"
-        >
+        <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-lg">
           {success}
         </div>
       )}
 
       <div className="space-y-12">
-        {/* Personal Information Section */}
         <section>
           <h2 className="text-xl font-semibold mb-6">
             Persönliche Informationen
@@ -138,18 +126,37 @@ const MyProfile = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Vollständiger Name
+                  Vorname
                 </label>
                 {isEditing ? (
                   <input
                     type="text"
-                    name="name"
-                    value={formData.name}
+                    name="firstName"
+                    value={formData.firstName}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border rounded-md focus:ring-shop-red focus:border-shop-red"
                   />
                 ) : (
-                  <p className="px-4 py-2 text-gray-900">{formData.name}</p>
+                  <p className="px-4 py-2 text-gray-900">
+                    {formData.firstName}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Nachname
+                </label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border rounded-md focus:ring-shop-red focus:border-shop-red"
+                  />
+                ) : (
+                  <p className="px-4 py-2 text-gray-900">{formData.lastName}</p>
                 )}
               </div>
 
@@ -187,24 +194,7 @@ const MyProfile = () => {
                 )}
               </div>
 
-              {/* <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Adresse
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border rounded-md focus:ring-shop-red focus:border-shop-red"
-                  />
-                ) : (
-                  <p className="px-4 py-2 text-gray-900">{formData.address}</p>
-                )}
-              </div> */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Street Field */}
+              <div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Straße und Hausnummer
@@ -224,7 +214,6 @@ const MyProfile = () => {
                   )}
                 </div>
 
-                {/* Postal Code Field */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Postleitzahl
@@ -245,7 +234,6 @@ const MyProfile = () => {
                   )}
                 </div>
 
-                {/* City Field */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Stadt
@@ -265,7 +253,6 @@ const MyProfile = () => {
                   )}
                 </div>
 
-                {/* Country Field */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Land

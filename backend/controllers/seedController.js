@@ -1,27 +1,57 @@
-import Category from "../models/CategoryModel.js";
+// controllers/seedController.js
+import mongoose from "mongoose";
+import { Category } from "../models/CategoryModel.js";
+import { Product } from "../models/ProductModel.js";
 import categoriesData from "../data/categories.js";
 
 export const seedDatabase = async () => {
   try {
-    // Clear existing data
-    await Category.deleteMany();
+    await mongoose.connection.dropDatabase();
 
-    // Insert new data
-    const createdCategories = await Category.insertMany(categoriesData);
+    // Create categories first
+    const createdCategories = await Category.insertMany(
+      categoriesData.map((category) => ({
+        name: category.name,
+        slug: category.slug,
+      }))
+    );
 
-    console.log("Database seeded successfully");
-    return createdCategories;
+    // Create products with category references
+    const products = [];
+    for (const categoryData of categoriesData) {
+      const category = createdCategories.find(
+        (c) => c.slug === categoryData.slug
+      );
+
+      for (const productData of categoryData.products) {
+        products.push({
+          ...productData,
+          category: category._id,
+          _id: new mongoose.Types.ObjectId(),
+        });
+      }
+    }
+
+    await Product.insertMany(products);
+
+    // Update categories with product references
+    for (const category of createdCategories) {
+      const categoryProducts = products
+        .filter((p) => p.category.equals(category._id))
+        .map((p) => p._id);
+
+      await Category.findByIdAndUpdate(category._id, {
+        $set: { products: categoryProducts },
+      });
+    }
+
+    console.log(`Database seeded with:
+      - ${createdCategories.length} categories
+      - ${products.length} products`);
+
+    return { categories: createdCategories, products };
   } catch (error) {
-    console.error("Seeding error:", error);
+    console.error("Seeding failed:", error);
     throw error;
-  }
-};
-export const seedCategories = async (req, res) => {
-  try {
-    await Category.deleteMany();
-    const categories = await Category.insertMany(categoriesData);
-    res.status(201).json(categories);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 };

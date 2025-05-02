@@ -4,20 +4,45 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [totalQuantity, setTotalQuantity] = useState(3);
+  const [totalQuantity, setTotalQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  // load cart items from local storage
+  // Load cart items from local storage
   useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cartItems"));
+    const migrateLegacyCart = (oldCart) => {
+      // Add migration logic here if needed
+      return oldCart.items
+        .map((item) => ({
+          ...item,
+          _id: item.id, // Move old numeric ID to _id
+          id: undefined, // Remove numeric ID
+        }))
+        .filter((item) => item._id);
+    };
+
+    const savedCart = JSON.parse(localStorage.getItem("cart"));
     if (savedCart) {
-      const { items, totalQuantity, totalPrice } = savedCart;
-      setCartItems(items);
-      setTotalQuantity(totalQuantity);
-      setTotalPrice(totalPrice);
+      if (savedCart.items.some((item) => !item._id)) {
+        // Migrate old cart format
+        const migratedCart = migrateLegacyCart(savedCart);
+        setCartItems(migratedCart);
+        localStorage.setItem(
+          "cart",
+          JSON.stringify({
+            items: migratedCart,
+            tq: savedCart.tq,
+            tp: savedCart.tp,
+          })
+        );
+      } else {
+        setCartItems(savedCart.items);
+        setTotalQuantity(savedCart.tq);
+        setTotalPrice(savedCart.tp);
+      }
     }
   }, []);
-  // Save cart to localStorage whenever it changes
+
+  // Save cart to localStorage
   useEffect(() => {
     const cartData = {
       items: cartItems,
@@ -26,24 +51,30 @@ export const CartProvider = ({ children }) => {
     };
     localStorage.setItem("cart", JSON.stringify(cartData));
   }, [cartItems, totalQuantity, totalPrice]);
-  // Calculate totals whenever cart items change
+
+  // Calculate totals
   useEffect(() => {
-    let newTotalQuantity = 0;
-    let newTotalPrice = 0;
+    const { quantity, price } = cartItems.reduce(
+      (acc, item) => ({
+        quantity: acc.quantity + item.quantity,
+        price: acc.price + item.price * item.quantity,
+      }),
+      { quantity: 0, price: 0 }
+    );
 
-    cartItems.forEach((item) => {
-      newTotalQuantity += item.quantity;
-      newTotalPrice += item.price * item.quantity;
-    });
-
-    setTotalQuantity(newTotalQuantity);
-    setTotalPrice(newTotalPrice);
+    setTotalQuantity(quantity);
+    setTotalPrice(price);
   }, [cartItems]);
 
   // Add item to cart
-
   const addItem = (newItem) => {
-    const cartId = `${newItem.id}-${newItem.selectedSize || ""}-${
+    if (!newItem._id) {
+      console.error("Cannot add item without _id");
+      console.error("Item missing _id:", newItem);
+      return;
+    }
+
+    const cartId = `${newItem._id}-${newItem.selectedSize || ""}-${
       newItem.selectedColor || ""
     }`;
 
@@ -58,14 +89,25 @@ export const CartProvider = ({ children }) => {
         );
       }
 
-      return [...prevItems, { ...newItem, cartId }];
+      return [
+        ...prevItems,
+        {
+          ...newItem,
+          cartId,
+          _id: newItem._id, // Ensure _id is stored
+        },
+      ];
     });
   };
+
+  // Remove item from cart
   const removeItem = (cartId) => {
     setCartItems((prevItems) =>
       prevItems.filter((item) => item.cartId !== cartId)
     );
   };
+
+  // Update item quantity
   const updateQuantity = (cartId, newQuantity) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -75,6 +117,8 @@ export const CartProvider = ({ children }) => {
       )
     );
   };
+
+  // Clear entire cart
   const clearCart = () => {
     setCartItems([]);
     setTotalQuantity(0);

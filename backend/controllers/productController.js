@@ -1,4 +1,4 @@
-import Product from "../models/productModel.js";
+import { Product } from "../models/productModel.js";
 
 //  create product
 export const createProduct = async (req, res) => {
@@ -10,7 +10,6 @@ export const createProduct = async (req, res) => {
   }
 };
 
-
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -18,7 +17,7 @@ export const getProducts = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};      
+};
 
 export const getProduct = async (req, res) => {
   const { id } = req.params;
@@ -32,11 +31,21 @@ export const getProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};          
+};
 
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, image, description, brand, category, price, countInStock, rating, numReviews } = req.body;
+  const {
+    name,
+    image,
+    description,
+    brand,
+    category,
+    price,
+    countInStock,
+    rating,
+    numReviews,
+  } = req.body;
   try {
     const product = await Product.findById(id);
     if (product) {
@@ -57,7 +66,7 @@ export const updateProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};      
+};
 
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
@@ -72,5 +81,3 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-    

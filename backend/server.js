@@ -7,6 +7,7 @@ import productRoutes from "./routes/productRoutes.js";
 import connectDB from "./config/db.js";
 import seedRoutes from "./routes/seedRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -16,7 +17,14 @@ const app = express();
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["POST", "GET", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 // routes
 // user routes
@@ -28,7 +36,9 @@ app.use("/api/products", productRoutes);
 
 // category routes
 app.use("/api/categories", categoryRoutes);
-app.use("/api", seedRoutes);
+app.use("/api/seed", seedRoutes);
+// order routes
+app.use("/api/orders", orderRoutes);
 
 // Connect to MongoDB
 connectDB();

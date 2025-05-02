@@ -1,7 +1,9 @@
+// routes/seedRoutes.js
+import { seedDatabase } from "../controllers/seedController.js";
 import express from "express";
-import { seedCategories } from "../controllers/seedController.js";
+
 const router = express.Router();
 
-router.post("/seed", seedCategories);
+router.post("/", seedDatabase);
 
 export default router;

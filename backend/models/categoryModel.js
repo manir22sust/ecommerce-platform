@@ -1,14 +1,19 @@
+// models/CategoryModel.js
 import mongoose from "mongoose";
-import { productSchema } from "./productModel.js";
 
-const categorySchema = new mongoose.Schema({
-  slug: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
-  image: String,
-  products: [productSchema],
-});
-// Check if model already exists before creating it
-const Category =
+const categorySchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+  },
+  { timestamps: true }
+);
+
+export const Category =
   mongoose.models.Category || mongoose.model("Category", categorySchema);
-
-export default Category;

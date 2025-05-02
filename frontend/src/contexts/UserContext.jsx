@@ -1,5 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { loginUser as apiLogin } from "../services/authAPI";
+import {
+  loginUser as apiLogin,
+  registerUser as apiRegister,
+} from "../services/authAPI";
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
@@ -42,6 +45,25 @@ export function UserProvider({ children }) {
     } catch (error) {
       console.error("Login failed:", error);
       throw error; // Propagate error to UI
+    }
+  };
+  const register = async (userData) => {
+    try {
+      const registeredUser = await apiRegister(userData); // Pass userData to API
+      const completeUser = {
+        ...registeredUser,
+        address: registeredUser.address || {
+          street: "",
+          postalCode: "",
+          city: "",
+          country: "Germany",
+        },
+      };
+      setUser(completeUser);
+      localStorage.setItem("user", JSON.stringify(completeUser));
+    } catch (error) {
+      console.error("Registration failed:", error);
+      throw error;
     }
   };
   const logout = () => {
@@ -92,6 +114,7 @@ export function UserProvider({ children }) {
         logout,
         updateUser,
         updateAddress,
+        register,
       }}
     >
       {children}

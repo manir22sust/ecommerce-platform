@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import categories from "../utils/data/Categories";
 import useCategories from "../hooks/useCategories";
@@ -21,6 +21,7 @@ const SingleProduct = () => {
   const [error, setError] = useState(false);
   // Update the component state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate();
 
   // Add this function to handle image changes
   const handleImageChange = (index) => {
@@ -83,7 +84,7 @@ const SingleProduct = () => {
       alert(`Nur noch ${product.stock} Stück verfügbar`);
       return;
     }
-    // Create cart item object
+    /* // Create cart item object
     const cartItem = {
       id: product.id,
       slug: product.slug,
@@ -103,7 +104,27 @@ const SingleProduct = () => {
 
     // Add to cart (using your cart context)
     addItem(cartItem);
+ */
+    // Create cart item object with _id
+    const cartItem = {
+      _id: product._id, // Changed from id to _id
+      slug: product.slug,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice || null,
+      image: product.images?.[0] || product.image,
+      quantity: quantity,
+      selectedSize: product.sizes ? selectedSize : null,
+      selectedColor: product.colors ? selectedColor : null,
+      category: category.slug,
+      maxStock: product.stock,
+      variantIdentifier: `${product._id}-${selectedSize || "no-size"}-${
+        selectedColor || "no-color"
+      }`,
+    };
 
+    // Add to cart
+    addItem(cartItem);
     // Optional: Reset selections
     setSelectedSize("");
     setSelectedColor("");
@@ -111,6 +132,8 @@ const SingleProduct = () => {
 
     // Show success feedback
     alert(`${product.name} wurde dem Warenkorb hinzugefügt!`);
+    // Redirect to cart page
+    navigate("/cart");
   };
 
   const calculateDiscount = () => {

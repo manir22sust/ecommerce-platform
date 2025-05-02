@@ -3,7 +3,7 @@ import { useUser } from "../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const { login } = useUser();
+  const {  register } = useUser();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     gender: "",
@@ -67,26 +67,28 @@ const Register = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    // Create user object and login
-    const userData = {
-      email: form.email,
-      firstName: form.firstName,
-      lastName: form.lastName,
-      gender: form.gender,
-      newsletter: form.newsletter,
-    };
-
-    login(userData);
-    // Here you would typically redirect to another page
-    console.log("Registration successful:", userData);
-    navigate("/login");
+    try {
+      await register({
+        email: form.email,
+        password: form.password,
+        firstName: form.firstName,
+        lastName: form.lastName,
+        gender: form.gender,
+        newsletter: form.newsletter,
+      });
+      navigate("/login");
+    } catch (error) {
+      setErrors({
+        general: error.message.includes("400")
+          ? "Invalid registration data"
+          : error.message,
+      });
+    }
   };
-
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-lg p-6 rounded-md shadow-md">

@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { ImSpinner8 } from "react-icons/im";
 import NotFound from "../components/NotFound";
 import useCategories from "../hooks/useCategories";
+import { formatPrice } from "../utils/formatPrice";
 
 const CategoryPage = () => {
   const { categories, error } = useCategories();
@@ -71,7 +72,7 @@ const CategoryPage = () => {
 
               <div className="flex justify-between items-center">
                 <p className="text-xl font-medium text-gray-900">
-                  €{product.price.toFixed(2)}
+                  {formatPrice(product.price)}
                 </p>
                 <Link
                   to={`/products/${product.slug}`}

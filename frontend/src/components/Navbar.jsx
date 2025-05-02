@@ -87,7 +87,7 @@ const Navbar = () => {
             </div>
 
             {/* Account dropdown */}
-            <div className="relative">
+            <div className="relative z-[1000]">
               <button
                 onClick={() => setIsAccountOpen(!isAccountOpen)}
                 className="p-2 rounded-full hover:bg-gray-100 focus:outline-none"
