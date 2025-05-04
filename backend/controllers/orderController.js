@@ -6,83 +6,14 @@ import { calculateTax } from "../utils/taxCalculator.js";
 import { getShippingCost } from "../utils/shippingService.js";
 
 import mongoose from "mongoose";
-// @desc    Create new order
-// @route   POST /api/orders
-// @access  Private
-/* const createOrder = asyncHandler(async (req, res) => {
-  const {
-    items,
-    paymentMethod,
-    shippingAddress,
-    shippingOption,
-    specialInstructions,
-  } = req.body;
 
-  // Validate cart items
-  if (!items || items.length === 0) {
-    res.status(400);
-    throw new Error("No order items");
-  }
-
-  // Get user with shipping address
-  const user = await User.findById(req.user._id).select("address");
-
-  // Verify products and calculate prices
-  const verifiedItems = await Promise.all(
-    items.map(async (item) => {
-      const product = await Product.findById(item.product);
-      if (!product) {
-        res.status(404);
-        throw new Error(`Product not found: ${item.product}`);
-      }
-
-      return {
-        product: product.toObject(), // Store product snapshot
-        quantity: item.quantity,
-        price: product.price,
-        size: item.size,
-        color: item.color,
-      };
-    })
-  );
-
-  // Calculate totals
-  const subtotal = verifiedItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  // Get shipping cost (implement your shipping logic)
-  const shippingCost = await getShippingCost(shippingOption, verifiedItems);
-
-  // Create order
-  const order = new Order({
-    user: req.user._id,
-    items: verifiedItems,
-    shippingAddress: shippingAddress || user.address,
-    shipping: {
-      company: "Zahida Fashion GmbH (Paket)",
-      cost: shippingCost,
-      option: shippingOption,
-    },
-    payment: {
-      method: paymentMethod,
-    },
-    tax: calculateTax(subtotal),
-    specialInstructions,
-  });
-
-  // Save and return order
-  const createdOrder = await order.save();
-
-  res.status(201).json({
-    _id: createdOrder._id,
-    status: createdOrder.status,
-    total: createdOrder.total,
-    paymentStatus: createdOrder.payment.status,
-  });
-}); */
 const createOrder = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Authentication required",
+      code: "UNAUTHORIZED",
+    });
+  }
   const {
     items,
     paymentMethod,

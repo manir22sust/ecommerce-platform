@@ -1,4 +1,3 @@
-// controllers/seedController.js
 import mongoose from "mongoose";
 import { Category } from "../models/CategoryModel.js";
 import { Product } from "../models/ProductModel.js";
@@ -8,11 +7,12 @@ export const seedDatabase = async () => {
   try {
     await mongoose.connection.dropDatabase();
 
-    // Create categories first
+    // Create categories with images
     const createdCategories = await Category.insertMany(
       categoriesData.map((category) => ({
         name: category.name,
         slug: category.slug,
+        image: category.image || "default-image.jpg", // Add image field
       }))
     );
 
@@ -24,10 +24,13 @@ export const seedDatabase = async () => {
       );
 
       for (const productData of categoryData.products) {
+        const { id, ...productWithoutId } = productData; // Remove manual ID
         products.push({
-          ...productData,
+          ...productWithoutId,
           category: category._id,
-          _id: new mongoose.Types.ObjectId(),
+          _id: new mongoose.Types.ObjectId(), // Generate new ObjectId
+          image: productData.image, // Include image
+          images: productData.images, // Include images array
         });
       }
     }

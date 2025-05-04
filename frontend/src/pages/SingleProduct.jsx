@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 // import categories from "../utils/data/Categories";
 import useCategories from "../hooks/useCategories";
 import { useCart } from "../hooks/useCart";
+import Modal from "../components/Modal";
 
 const SingleProduct = () => {
   const {
@@ -22,7 +23,8 @@ const SingleProduct = () => {
   // Update the component state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const closeModal = () => setModalVisible(false);
   // Add this function to handle image changes
   const handleImageChange = (index) => {
     setCurrentImageIndex(index);
@@ -84,27 +86,7 @@ const SingleProduct = () => {
       alert(`Nur noch ${product.stock} Stück verfügbar`);
       return;
     }
-    /* // Create cart item object
-    const cartItem = {
-      id: product.id,
-      slug: product.slug,
-      name: product.name,
-      price: product.price,
-      originalPrice: product.originalPrice || null,
-      image: product.images?.[0] || product.image,
-      quantity: quantity,
-      selectedSize: product.sizes ? selectedSize : null,
-      selectedColor: product.colors ? selectedColor : null,
-      category: category.slug,
-      maxStock: product.stock,
-      variantIdentifier: `${product.id}-${selectedSize || "no-size"}-${
-        selectedColor || "no-color"
-      }`,
-    };
 
-    // Add to cart (using your cart context)
-    addItem(cartItem);
- */
     // Create cart item object with _id
     const cartItem = {
       _id: product._id, // Changed from id to _id
@@ -130,12 +112,12 @@ const SingleProduct = () => {
     setSelectedColor("");
     setQuantity(1);
 
-    // Show success feedback
-    alert(`${product.name} wurde dem Warenkorb hinzugefügt!`);
-    // Redirect to cart page
+    setModalVisible(true);
+  };
+  const goToCart = () => {
+    setModalVisible(false);
     navigate("/cart");
   };
-
   const calculateDiscount = () => {
     if (!product.originalPrice) return 0;
     return Math.round(
@@ -368,6 +350,15 @@ const SingleProduct = () => {
           </div>
         </div>
       </div>
+      <Modal
+        title="Zum Warenkorb hinzugefügt"
+        message="Produkt wurde erfolgreich zum Warenkorb hinzugefügt."
+        confirmLabel="Zum Warenkorb"
+        onConfirm={goToCart}
+        showModal={modalVisible}
+        onClose={closeModal}
+        type="success"
+      />
     </div>
   );
 };

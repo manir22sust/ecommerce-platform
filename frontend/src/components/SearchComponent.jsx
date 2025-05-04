@@ -171,7 +171,7 @@ const SearchComponent = () => {
             >
               Keine Ergebnisse für "{searchQuery}"
               <Link
-                to="/kontakt"
+                to="/contact"
                 className="block mt-2 text-shop-red hover:underline"
               >
                 Kontaktieren Sie uns
