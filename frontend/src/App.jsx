@@ -37,6 +37,7 @@ import AGBPage from "./pages/AGBPage";
 import DatenschutzPage from "./pages/DatenschutzPage";
 import WiderrufPage from "./pages/WiderrufPage";
 import CookieSettingsPage from "./pages/CookieSettingsPage";
+import { PrivateRoute, RestrictedRoute } from "./components/RouteWrappers";
 
 function App() {
   return (
@@ -64,26 +65,6 @@ function App() {
                 path="/products/:productSlug"
                 element={<SingleProduct />}
               />
-
-              {/* Shopping Cart & Checkout */}
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order" element={<OrderSummary />} />
-              <Route
-                path="/order-confirmation"
-                element={<OrderConfirmatiom />}
-              />
-              <Route path="/thank-you" element={<ThankYou />} />
-
-              {/* User Account */}
-              <Route path="/account" element={<AccountSidebar />} />
-              <Route path="/myprofile" element={<MyProfile />} />
-              <Route path="/wishlist" element={<Wishlist />} />
-
-              {/* Authentication */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-
               {/* Service & Legal */}
               <Route path="/service" element={<Service />} />
               <Route path="/agb" element={<AGBPage />} />
@@ -91,7 +72,31 @@ function App() {
               <Route path="/widerruf" element={<WiderrufPage />} />
               <Route path="/cookies" element={<CookieSettingsPage />} />
 
-              {/* test data */}
+              {/* Private Routes (Authenticated only) */}
+              <Route element={<PrivateRoute />}>
+                {/* Shopping Cart & Checkout */}
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/order" element={<OrderSummary />} />
+                <Route
+                  path="/order-confirmation"
+                  element={<OrderConfirmatiom />}
+                />
+                <Route path="/thank-you" element={<ThankYou />} />
+
+                {/* User Account */}
+                <Route path="/account" element={<AccountSidebar />} />
+                <Route path="/myprofile" element={<MyProfile />} />
+                <Route path="/wishlist" element={<Wishlist />} />
+              </Route>
+
+              {/* Restricted Routes (Unauthenticated only)  */}
+              <Route element={<RestrictedRoute />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+              </Route>
+
+              {/* Test/Development Routes */}
               <Route path="/categories-list" element={<CategoriesList />} />
               {/* Ladies Fashion Page */}
               <Route path="/ladies-fashion" element={<LadiesFashion />} />

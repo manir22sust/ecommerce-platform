@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShoppingBagIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 const OrderConfirmation = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const order = state;
   // Add loading state
   const [loading, setLoading] = useState(true);
