@@ -245,14 +245,36 @@ const createOrder = asyncHandler(async (req, res) => {
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private
-const getMyOrders = asyncHandler(async (req, res) => {
+/* const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id })
     .sort("-createdAt")
     .select("_id createdAt total status payment.status");
 
   res.json(orders);
 });
+ */
+// GET LOGGED-IN USER'S ORDERS CONTROLLER
+const getMyOrders = async (req, res) => {
+  try {
+    // Get orders for authenticated user using the user ID from auth middleware
+    const orders = await Order.find({ user: req.user._id })
+      .populate({
+        path: "items.product",
+        select: "name image", // Include essential product details
+      })
+      .sort({ createdAt: -1 }); // Newest orders first
 
+    console.log(`Found ${orders.length} orders for user ${req.user._id}`);
+
+    res.status(200).json(orders);
+  } catch (err) {
+    console.error("Get my orders error:", err);
+    res.status(500).json({
+      error: "Failed to retrieve orders",
+      details: err.message,
+    });
+  }
+};
 // @desc    Get order by ID
 // @route   GET /api/orders/:id
 // @access  Private
