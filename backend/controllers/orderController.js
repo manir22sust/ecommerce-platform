@@ -7,6 +7,59 @@ import { getShippingCost } from "../utils/shippingService.js";
 
 import mongoose from "mongoose";
 
+// CREATE ORDER CONTROLLER
+const createOrder = async (req, res) => {
+  try {
+    const {
+      user,
+      items,
+      shippingAddress,
+      payment,
+      shippingOption,
+      specialInstructions,
+    } = req.body;
+
+    console.log("Create order request:", JSON.stringify(req.body, null, 2));
+
+    const populatedItems = [];
+
+    for (const item of items) {
+      const productData = await Product.findById(item.product);
+
+      if (!productData) {
+        return res
+          .status(400)
+          .json({ error: `Product ${item.product} does not exist` });
+      }
+
+      populatedItems.push({
+        product: item.product,
+        quantity: item.quantity,
+        price: productData.price, // Auto-fill price from DB
+      });
+    }
+
+    const newOrder = new Order({
+      user,
+      items: populatedItems,
+      shippingAddress,
+      payment: { method: payment }, // Ensure schema uses `payment.method`
+      shipping: { option: shippingOption }, // Ensure schema uses `shipping.option`
+      specialInstructions,
+    });
+
+    await newOrder.save();
+
+    res.status(201).json(newOrder);
+  } catch (err) {
+    console.error("Create order error:", err);
+    res
+      .status(500)
+      .json({ error: "Failed to create order", details: err.message });
+  }
+};
+
+/* 
 const createOrder = asyncHandler(async (req, res) => {
   if (!req.user) {
     return res.status(401).json({
@@ -188,7 +241,7 @@ const createOrder = asyncHandler(async (req, res) => {
 
     res.status(statusCode).json(response);
   }
-});
+}); */
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private

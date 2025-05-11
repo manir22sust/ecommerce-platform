@@ -34,7 +34,7 @@ const Checkout = () => {
   useEffect(() => {
     if (!user && !isSubmitting)
       navigate("/login", { state: { from: "/checkout" } });
-    if (items.length === 0 && !isSubmitting) navigate("/cart");
+    //if (items.length === 0 && !isSubmitting) navigate("/cart");
   }, [user, items, navigate, isSubmitting]);
 
   const paymentMethods = [
@@ -84,20 +84,20 @@ const Checkout = () => {
           ...(data.phone && { phone: data.phone.trim() }),
           ...(data.fullName && { fullName: data.fullName.trim() }),
         },
-        paymentMethod: selectedPayment,
+        payment: selectedPayment,
         shippingOption: shippingOption,
         specialInstructions: orderNote.trim(),
       };
-  
-      const response = await createOrder(orderData);
+
+      const response = await createOrder(orderData, user.token);
 
       navigate("/order-confirmation", {
         state: {
-          orderId: response._id,
+          orderId: response.id,
           ...(response.estimatedDelivery && {
             estimatedDelivery: response.estimatedDelivery,
           }),
-          total: response.total,
+          total: response.subtotal,
         },
       });
       clearCart();

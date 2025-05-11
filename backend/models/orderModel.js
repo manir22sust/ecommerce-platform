@@ -66,38 +66,36 @@ const orderSchema = new mongoose.Schema(
       method: {
         type: String,
         required: true,
-        enum: ["credit_card", "paypal", "bank_transfer"],
+        enum: ["invoice", "credit_card", "paypal", "bank_transfer"],
       },
       status: {
         type: String,
-        required: true,
+
         enum: ["pending", "completed", "failed", "refunded"],
         default: "pending",
       },
       transactionId: {
         type: String,
-        index: true,
       },
       amount: {
         type: Number,
-        required: true,
+
         min: [0, "Payment amount cannot be negative"],
       },
     },
     shipping: {
       company: {
         type: String,
-        required: true,
+
         enum: ["DHL", "DPD", "UPS", "Hermes"],
       },
       cost: {
         type: Number,
-        required: true,
+
         min: [0, "Shipping cost cannot be negative"],
       },
       trackingNumber: {
         type: String,
-        index: true,
       },
       estimatedDelivery: {
         type: Date,
@@ -111,24 +109,23 @@ const orderSchema = new mongoose.Schema(
     },
     subtotal: {
       type: Number,
-      required: true,
+
       min: [0, "Subtotal cannot be negative"],
     },
     tax: {
       type: Number,
-      required: true,
+
       min: [0, "Tax cannot be negative"],
     },
     total: {
       type: Number,
-      required: true,
+
       min: [0, "Total cannot be negative"],
     },
     status: {
       type: String,
       enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
       default: "pending",
-      index: true,
     },
   },
   {
@@ -155,7 +152,11 @@ orderSchema.virtual("formattedDate").get(function () {
   });
 });
 
+/* orderSchema.virtual("formattedTotal").get(function () {
+  return `€${this.total.toFixed(2)}`;
+}); */
 orderSchema.virtual("formattedTotal").get(function () {
+  if (typeof this.total !== "number") return "€0.00";
   return `€${this.total.toFixed(2)}`;
 });
 

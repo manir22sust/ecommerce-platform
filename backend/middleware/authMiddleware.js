@@ -56,7 +56,7 @@ export const protect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 4. User lookup with existence check
-    const user = await User.findById(decoded.id).select("-password"); // Changed from userId to id
+    const user = await User.findById(decoded.userId).select("-password"); // Changed from userId to id
     if (!user) {
       return res.status(401).json({
         code: "USER_NOT_FOUND",

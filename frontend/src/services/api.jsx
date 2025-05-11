@@ -5,11 +5,11 @@ export const API_URL =
 if (import.meta.env.DEV) {
   console.log(`API Base URL: ${API_URL}`);
 }
-
-export const createOrder = async (orderData) => {
+/* 
+export const createOrder = async (orderData, token) => {
   try {
     // 1. Get JWT token from storage
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
 
     if (!token) {
       throw new Error("User not authenticated. Please login first.");
@@ -29,7 +29,7 @@ export const createOrder = async (orderData) => {
 
     // 3. Handle 401 Unauthorized specifically
     if (response.status === 401) {
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       throw new Error("Session expired. Please login again.");
     }
 
@@ -58,31 +58,38 @@ export const createOrder = async (orderData) => {
       message: error.message,
       endpoint: `${API_URL}/orders`,
       payload: orderData,
-      tokenExists: !!localStorage.getItem("token"),
+      tokenExists: !!token,
     });
 
     throw new Error(
       error.message || "Failed to create order. Please check your connection."
     );
   }
-};
-
-/* export const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-
-
-import axios from "axios";
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api",
-});
+}; */
 
 export const createOrder = async (orderData, token) => {
-  const response = await api.post("/orders", orderData, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  return response.data;
+  try {
+    const response = await fetch("http://localhost:8000/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Send token in Authorization header
+      },
+      body: JSON.stringify(orderData), // Order data sent in the request body
+    });
+
+    // Handle response based on HTTP status code
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Order creation failed:", errorData);
+      throw new Error(errorData.message || "Unknown error");
+    }
+
+    const responseData = await response.json();
+    console.log("Order created successfully:", responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error during order creation:", error);
+    throw error;
+  }
 };
- */

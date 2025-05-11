@@ -64,8 +64,12 @@ const SingleProduct = () => {
   }, [productSlug, categories, categoriesLoading, categoriesError]);
 
   const handleAddToCart = () => {
-    if (product.sizes && !selectedSize && !selectedColor) {
+    if (product.sizes && !selectedSize) {
       alert("Bitte wählen Sie eine Größe aus");
+      return;
+    }
+    if (product.colors && !selectedColor) {
+      alert("Bitte wählen Sie eine Farbe aus");
       return;
     }
     console.log("Added to cart:", {
@@ -352,7 +356,7 @@ const SingleProduct = () => {
       </div>
       <Modal
         title="Zum Warenkorb hinzugefügt"
-        message="Produkt wurde erfolgreich zum Warenkorb hinzugefügt."
+        message={`Der Artikel ${product.name} wurde erfolgreich in Ihren Warenkorb gelegt.`}
         confirmLabel="Zum Warenkorb"
         onConfirm={goToCart}
         showModal={modalVisible}

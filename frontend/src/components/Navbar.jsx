@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   ShoppingCartIcon,
@@ -11,13 +11,15 @@ import SearchComponent from "./SearchComponent";
 //import categories from "../utils/data/Categories";
 import useCategories from "../hooks/useCategories";
 import { useCart } from "../hooks/useCart";
+import { useUser } from "../hooks/useUser";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
-  const [cartItems] = useState(3);
   const { totalQuantity } = useCart();
   const { categories, loading, error } = useCategories();
+  const { logout } = useUser();
+  const navigate = useNavigate();
 
   if (loading) return <div>Loading categories...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -30,7 +32,14 @@ const Navbar = () => {
   const accountItems = [
     { name: "Mein Profil", href: "/myprofile" },
     { name: "Bestellungen", href: "/order" },
-    { name: "Abmelden", href: "#" },
+    {
+      name: "Abmelden",
+      action: () => {
+        logout();
+        navigate("/login");
+        setIsAccountOpen(false);
+      },
+    },
   ];
 
   return (
@@ -95,7 +104,7 @@ const Navbar = () => {
                 <UserIcon className="h-6 w-6 text-gray-600" />
               </button>
 
-              {isAccountOpen && (
+              {/*  {isAccountOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
                   {accountItems.map((item) => (
                     <Link
@@ -107,6 +116,33 @@ const Navbar = () => {
                       {item.name}
                     </Link>
                   ))}
+                </div>
+              )} */}
+              {isAccountOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
+                  {accountItems.map((item) =>
+                    item.href ? (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsAccountOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    ) : (
+                      <button
+                        key={item.name}
+                        onClick={() => {
+                          item.action?.();
+                          setIsAccountOpen(false);
+                        }}
+                        className="block w-full text-left px-14 py-2 text-gray-700 hover:bg-gray-100"
+                      >
+                        {item.name}
+                      </button>
+                    )
+                  )}
                 </div>
               )}
             </div>

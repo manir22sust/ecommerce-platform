@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -30,6 +31,7 @@ app.use(
   })
 );
 
+app.use(cookieParser());
 // routes
 // user routes
 app.use("/api/users", userRoutes);
