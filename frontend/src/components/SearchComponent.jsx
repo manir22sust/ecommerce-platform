@@ -5,13 +5,15 @@ import {
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import categories from "../utils/data/Categories";
+// import categories from "../utils/data/Categories";
+import useCategories from "../hooks/useCategories";
 
 const SearchComponent = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasFocus, setHasFocus] = useState(false);
+  const { categories } = useCategories();
 
   // Memoize flattened products
   const allProducts = useMemo(
@@ -126,7 +128,7 @@ const SearchComponent = () => {
             <ul className="py-2">
               {searchResults.map((product) => (
                 <li
-                  key={`${product.categorySlug}-${product.id}`}
+                  key={`${product.categorySlug}-${product._id}`}
                   role="option"
                   aria-selected="false"
                 >

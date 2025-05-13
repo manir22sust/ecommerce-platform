@@ -104,20 +104,6 @@ const Navbar = () => {
                 <UserIcon className="h-6 w-6 text-gray-600" />
               </button>
 
-              {/*  {isAccountOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
-                  {accountItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsAccountOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              )} */}
               {isAccountOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5">
                   {accountItems.map((item) =>

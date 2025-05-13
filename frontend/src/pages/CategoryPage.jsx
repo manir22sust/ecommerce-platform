@@ -47,9 +47,9 @@ const CategoryPage = () => {
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {categoryData.products.map((product) => (
+        {categoryData.products.map((product, index) => (
           <div
-            key={product.id}
+            key={index}
             className="group relative bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-200"
           >
             <div className="aspect-w-1 aspect-h-1 bg-gray-200 rounded-t-lg overflow-hidden">
