@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Category } from "../models/categoryModel.js";
 import { Product } from "../models/productModel.js";
-import categoriesData from "../data/categories.js";
+import categoriesData from "../data/Categories.js";
 
 export const seedDatabase = async () => {
   try {
