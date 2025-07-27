@@ -8,7 +8,7 @@ if (import.meta.env.DEV) {
 
 export const createOrder = async (orderData, token) => {
   try {
-    const response = await fetch("http://localhost:8000/api/orders", {
+    const response = await fetch(`${API_URL}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export const createOrder = async (orderData, token) => {
 
 export const getMyOrders = async (token) => {
   try {
-    const response = await fetch("http://localhost:8000/api/orders/myorders", {
+    const response = await fetch(`${API_URL}/orders/myorders`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
