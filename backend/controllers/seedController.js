@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { Category } from "../models/CategoryModel.js";
-import { Product } from "../models/ProductModel.js";
+import { Category } from "../models/categoryModel.js";
+import { Product } from "../models/productModel.js";
 import categoriesData from "../data/categories.js";
 
 export const seedDatabase = async () => {
