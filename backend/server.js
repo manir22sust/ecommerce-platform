@@ -25,6 +25,7 @@ app.use(
       "https://unsplash.com",
       "https://images.unsplash.com",
       "https://ecommerce-platform-rjsb.onrender.com",
+      "https://shop.maniruddin.com",
     ],
     methods: ["POST", "GET", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
