@@ -24,6 +24,7 @@ app.use(
       "http://localhost:5173",
       "https://unsplash.com",
       "https://images.unsplash.com",
+      "https://ecommerce-platform-rjsb.onrender.com",
     ],
     methods: ["POST", "GET", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
